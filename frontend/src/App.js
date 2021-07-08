@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './App.css';
+import NavBar from './NavBar';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { Container } from 'reactstrap';
+import Welcome from './Welcome';
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
+class App extends React.Component {
+  constructor(){
+    super()
+    this.state = {
+      isAuthenticated: false,
+      user: null
+    }
+  }
+
+  login(){
+
+  }
+
+  logout(){
+
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Router>
+          <div>
+            <NavBar
+              isAuthenticated={this.state.isAuthenticated}
+              authButtonMethod={this.state.isAuthenticated ? this.logout : this.login}
+              user={this.state.user} />
+            <Container>
+              <Route exact path="/"
+                render={(props) =>
+                  <Welcome {...props}
+                    isAuthenticated={this.state.isAuthenticated}
+                    user={this.state.user}
+                    authButtonMethod={this.login} />
+                } />
+            </Container>
+          </div>
+        </Router>
+      </div>
+    );
+  }
 }
 
 export default App;
