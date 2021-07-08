@@ -1,5 +1,6 @@
 const msalConfig = require('../config')
-var msalClientApp = require('@azure/msal-node').ConfidentialClientApplication(msalConfig)
+const msal = require('@azure/msal-node')
+var msalClientApp = new msal.ConfidentialClientApplication(msalConfig)
 var signInRouter = require('express').Router()
 
 signInRouter.get('/', (req, res) => {
@@ -23,8 +24,9 @@ signInRouter.get('/auth', (req, res) => {
 	};
 
 	msalClientApp.acquireTokenByCode(tokenRequest).then((response) => {
-		//console.log("Successfully acquired token using Authorization Code.");
+		
 		res.json(response)
+		
 	}).catch((error) => {
 		console.log(error);
 		res.status(500).send(error);
