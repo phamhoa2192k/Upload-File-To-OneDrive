@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-let url = "mongodb+srv://210920:210920@clustertest1.cx5dh.mongodb.net/Upload_File_To_OneDrive?retryWrites=true&w=majority"
+let url = process.env.MONGODB_URL
 
 mongoose.connect(url);
 
