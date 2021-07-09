@@ -45,7 +45,7 @@ function AuthNavItem(props) {
 					<UserAvatar user={props.user} />
 				</DropdownToggle>
 				<DropdownMenu right>
-					<h5 className="dropdown-item-text mb-0">{props.user.displayName}</h5>
+					<h5 className="dropdown-item-text mb-0">{props.user.name}</h5>
 					<p className="dropdown-item-text text-muted mb-0">{props.user.email}</p>
 					<DropdownItem divider />
 					<DropdownItem onClick={props.authButtonMethod}>Sign Out</DropdownItem>
