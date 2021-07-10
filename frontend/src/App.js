@@ -1,12 +1,12 @@
 import './App.css';
 import NavBar from './NavBar';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import { Container } from 'reactstrap';
 import Welcome from './Welcome';
 import React from 'react';
 import Cookie from 'js-cookie'
 import 'bootstrap/dist/css/bootstrap.css';
-
+import File from './File'
 const SERVER_DOMAIN = "http://localhost:3001"
 class App extends React.Component {
   constructor() {
@@ -22,7 +22,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.uniqueId) {
+    if (this.state.uniqueId && this.state.user == null) {
       this.getUser(this.state.uniqueId)
     }
   }
@@ -61,16 +61,19 @@ class App extends React.Component {
               isAuthenticated={this.state.isAuthenticated}
               authButtonMethod={this.state.isAuthenticated ? this.logout : this.login}
               user={this.state.user} />
-            <Container>
-              <Route exact path="/"
-                render={(props) =>
-                  <Welcome {...props}
-                    isAuthenticated={this.state.isAuthenticated}
-                    user={this.state.user}
-                    authButtonMethod={this.login} />
-                } />
-            </Container>
           </div>
+          <Container>
+          <Route exact path="/file">
+            <File isAuthenticated={this.state.isAuthenticated}/>
+          </Route>
+
+          <Route exact path="/">
+            <Welcome
+                isAuthenticated={this.state.isAuthenticated}
+                user={this.state.user}
+                authButtonMethod={this.login} />
+          </Route>
+        </Container>
         </Router>
       </div>
     );

@@ -83,28 +83,27 @@ export default class NavBar extends React.Component {
 
 	render() {
 		// Only show calendar nav item if logged in
-		let uploadLink = null;
+		let file = null;
 		if (this.props.isAuthenticated) {
-			uploadLink = (
+			file = (
 				<NavItem>
-					<RouterNavLink to="/upload" className="nav-link" exact>Upload file</RouterNavLink>
+					<RouterNavLink to="/file" className="nav-link" exact>File</RouterNavLink>
 				</NavItem>
 			);
 		}
 
 		return (
 			<div>
-				<Router>
 				<Navbar color="dark" dark expand="md" fixed="top">
 					<Container>
-						<NavbarBrand href="/">React Graph Tutorial</NavbarBrand>
+						<NavbarBrand >Upload To OneDrive</NavbarBrand>
 						<NavbarToggler onClick={this.toggle} />
 						<Collapse isOpen={this.state.isOpen} navbar>
 							<Nav className="mr-auto" navbar>
 								<NavItem>
 									<RouterNavLink to="/" className="nav-link" exact>Home</RouterNavLink>
 								</NavItem>
-								{uploadLink}
+								{file}
 							</Nav>
 							<Nav className="justify-content-end" navbar>
 								<NavItem>
@@ -120,7 +119,7 @@ export default class NavBar extends React.Component {
 							</Nav>
 						</Collapse>
 					</Container>
-				</Navbar></Router>
+				</Navbar>
 			</div>
 		);
 	}
