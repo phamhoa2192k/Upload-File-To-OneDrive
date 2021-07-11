@@ -1,10 +1,10 @@
-const msalConfig = require('../config')
+const authConfig = require('../config').auth
 const msal = require('@azure/msal-node')
 const User = require('../DAO/User')
-var msalClientApp = new msal.ConfidentialClientApplication(msalConfig)
-var signInRouter = require('express').Router()
+var msalClientApp = new msal.ConfidentialClientApplication(authConfig)
+var authRouter = require('express').Router()
 
-signInRouter.get('/', (req, res) => {
+authRouter.get('/', (req, res) => {
      urlParameters = {
           scopes: process.env.OAUTH_SCOPES.split(','),
           redirectUri: process.env.OAUTH_REDIRECT_URI
@@ -15,19 +15,19 @@ signInRouter.get('/', (req, res) => {
      }).catch((error) => console.log(JSON.stringify(error)));
 })
 
-signInRouter.get('/auth', (req, res) => {
+authRouter.get('/auth', (req, res) => {
      const tokenRequest = {
           scopes: process.env.OAUTH_SCOPES.split(','),
           redirectUri: process.env.OAUTH_REDIRECT_URI,
           code: req.query.code
      };
      msalClientApp.acquireTokenByCode(tokenRequest).then(async (response) => {
-          let user = await User.findOne({ "uniqueId": response.uniqueId })
+          let user = await User.findOne({ accessToken: response.accessToken })
           if (user == null) {
                user = new User(response)
                user.save(console.log)
           }
-          res.cookie("uniqueId", response.uniqueId)
+          res.cookie("accessToken", response.accessToken)
           res.redirect(process.env.FRONTEND_SERVER)
      }).catch((error) => {
           console.log(error);
@@ -35,4 +35,4 @@ signInRouter.get('/auth', (req, res) => {
      });
 })
 
-module.exports = signInRouter
+module.exports = authRouter

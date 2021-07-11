@@ -1,18 +1,10 @@
+var storageConfig = require('../config').storage
 var fileRouter = require('express').Router()
 var multer = require('multer')
 var fs = require('fs')
 var path = require('path')
 const UPLOAD_DIR = "upload/"
-
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'upload')
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname)
-    }
-})
-
+var storage = multer.diskStorage(storageConfig)
 var upload = multer({ storage: storage })
 
 function getDir(dir) {
