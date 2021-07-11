@@ -26,5 +26,5 @@ frontend/yarn-error.log*
 backend/node_modules/
 
 #
-frontend/.idea
-backend/.idea
+frontend/.idea/
+backend/.idea/
