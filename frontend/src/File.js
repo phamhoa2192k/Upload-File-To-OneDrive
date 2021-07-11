@@ -2,8 +2,6 @@ import React from 'react'
 import {Table, Button, Container, Jumbotron} from 'reactstrap'
 import {Input} from '@material-ui/core';
 
-const BACKEND_SERVER = 'http://localhost:3001'
-
 function FileIcon(props) {
     let name = ""
     switch (props.type) {
@@ -35,11 +33,6 @@ function FileIcon(props) {
 }
 
 function FileComponent(props) {
-    function download(id) {
-        fetch(`${BACKEND_SERVER}/file/download?id=${id}`)
-            .catch(console.log)
-    }
-
     return (
         <tr>
             <td>
@@ -49,79 +42,35 @@ function FileComponent(props) {
                 {props.file.name}
             </td>
             <td>
-                {props.file.type}
+                {props.file.type.replace(".", "").toUpperCase()}
             </td>
             <td>
                 {props.file.time}
             </td>
             <td>
-                {props.file.size}
+                {`${(props.file.size/1024).toFixed(1)} KB`}
             </td>
         </tr>
     )
 }
 
 export default class File extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            files: []
-        }
-        this.upload = this.upload.bind(this)
-        this.download = this.download.bind(this)
-    }
-
-    upload(e) {
-        let file = e.target.files[0]
-        let formData = new FormData()
-        formData.append(file.name, file)
-        fetch(`${BACKEND_SERVER}/file/upload`, {
-            method: "POST",
-            headers: {
-                // "Content-Type": "multipart/form-data"
-            },
-            body: formData
-        }).then(res => res.json())
-            .then(json => this.setState({
-                ...this.state,
-                files: json
-            }))
-            .catch((console.log))
-    }
-
-    download() {
-
-    }
-
-    componentDidMount() {
-        if (this.props.isAuthenticated) {
-            fetch(`${BACKEND_SERVER}/file`)
-                .then(res => res.json())
-                .then(json => this.setState({
-                    ...this.state,
-                    files: json
-                }))
-                .catch(console.log)
-        }
-    }
-
     render() {
-        if (!this.props.isAuthenticated) return <Jumbotron>Please sign-in</Jumbotron>
-        else return (
+        return (
             <Container className={"body-container"}>
-                <Input type={"file"} name={"file"} id={"file"} onChange={this.upload}/>
-                <Table>
+                <Input type="file" onChange={(e) => this.props.uploadFile(e.target.files[0])}/>
+                <Table borderless>
                     <thead>
                     <tr>
                         <th></th>
                         <th>Name</th>
                         <th>Type</th>
-                        <th>Datetime</th>
+                        <th>Time upload</th>
                         <th>Size</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.files.map((file, index) => <FileComponent key ={index} file={file}/>)}
+                    {this.props.files.map((file, index) => <FileComponent key ={index} file={file}/>)}
                     </tbody>
                 </Table>
             </Container>
