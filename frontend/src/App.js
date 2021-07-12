@@ -28,8 +28,11 @@ class App extends React.Component {
       this.getFile("")
   }
 
-  getUser = (accessToken) => {
-    fetch(`${BACKEND}/user/get-user?accessToken=${accessToken}`)
+  getUser = () => {
+    fetch(`${BACKEND}/user/get-user`,{
+      method:"GET",
+      credentials: 'include'
+    })
       .then(res => res.json())
       .then(json => {
         if (json != null)
@@ -72,13 +75,15 @@ class App extends React.Component {
   }
 
   login = () => {
-    fetch(`${BACKEND}/signin`)
+    fetch(`${BACKEND}/auth/signin`,{
+      method:"GET"
+    })
       .then(res => res.json())
       .then(res => window.location.href = res)
   }
 
   logout = () => {
-    fetch(`${BACKEND}/logout`)
+    fetch(`${BACKEND}/auth/signout`)
       .then(console.log)
   }
 
